@@ -11,21 +11,31 @@ export interface CoinProps {
   symbol: string;
   rank: number;
   marketCapUsd: number;
+  id?: string;
 }
 
 function App() {
-  const [data, setData] = useState<CoinProps[]>([]);
+  const [response, setResponse] = useState<CoinProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [data, setData] = useState<CoinProps[]>([]);
 
   useEffect(() => {
     fetch("https://api.coincap.io/v2/assets")
       .then((response) => response.json())
       .then((data) => {
+        setResponse(data.data.slice(0, 100));
         setData(data.data.slice(0, 100));
         setLoading(false);
       })
       .catch((err) => toast("Oops, there was en error fetching the data!"));
   }, []);
+
+  const filterData = (searchTerm: string) => {
+    const results = response.filter((coin) =>
+      coin.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setData(results);
+  };
 
   loading && <Loading />;
 
@@ -33,6 +43,12 @@ function App() {
     <div className={s.App}>
       <div className={s.header}>
         <Header />
+        <input
+          className={s.input}
+          type="input"
+          placeholder="Search by name"
+          onChange={(e) => filterData(e.target.value)}
+        ></input>
       </div>
       <ToastContainer
         position="bottom-center"
@@ -46,14 +62,13 @@ function App() {
       />
       <div className={s.container}>
         {data.map((coin) => (
-          <div>
-            <Card
-              name={coin.name}
-              symbol={coin.symbol}
-              rank={coin.rank}
-              marketCapUsd={coin.marketCapUsd}
-            />
-          </div>
+          <Card
+            key={coin.id}
+            name={coin.name}
+            symbol={coin.symbol}
+            rank={coin.rank}
+            marketCapUsd={coin.marketCapUsd}
+          />
         ))}
       </div>
     </div>
