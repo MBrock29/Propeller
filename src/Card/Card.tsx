@@ -1,7 +1,7 @@
 import { CoinProps } from "../App";
 import s from "./Card.module.scss";
 
-const Card = ({ name, symbol, rank, marketCapUsd }: CoinProps) => {
+const Card: React.FC<CoinProps> = ({ name, symbol, rank, marketCapUsd }) => {
   const marketCap = Number(marketCapUsd).toLocaleString("us", {
     maximumFractionDigits: 0,
   });

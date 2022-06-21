@@ -1,9 +1,10 @@
-import { url } from "inspector";
 import { useEffect, useState } from "react";
 import s from "./App.module.scss";
 import Card from "./Card/Card";
 import Header from "./Header/Header";
 import { Loading } from "./Loading/Loading";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export interface CoinProps {
   name: string;
@@ -22,19 +23,27 @@ function App() {
       .then((data) => {
         setData(data.data.slice(0, 100));
         setLoading(false);
-      });
+      })
+      .catch((err) => toast("Oops, there was en error fetching the data!"));
   }, []);
 
-  {
-    loading && <Loading />;
-  }
+  loading && <Loading />;
 
-  console.log(data);
   return (
     <div className={s.App}>
       <div className={s.header}>
         <Header />
       </div>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <div className={s.container}>
         {data.map((coin) => (
           <div>

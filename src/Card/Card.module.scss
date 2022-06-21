@@ -1,23 +1,26 @@
+@import "../Styles/Colors.scss";
+@import "../Styles/Variables.scss";
+
 .container {
   width: 300px;
   height: fit-content;
-  background-color: #323546;
-  padding: 5px;
-  margin: 20px;
+  background-color: $dark-blue;
+  padding: $space-nano;
+  margin: $space-mega;
   justify-content: center;
   align-items: center;
-  border-radius: 10px;
+  border-radius: $x2;
   &:hover {
     transform: scale(1.1);
   }
 }
 .rank {
-  color: #6188ff;
+  color: $purple;
 }
 .symbol {
-  color: #858ca2;
+  color: $grey;
 }
 
 .marketCap {
-  color: #16c784;
+  color: $green;
 }
