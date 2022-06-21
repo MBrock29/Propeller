@@ -1,24 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { url } from "inspector";
+import { useEffect, useState } from "react";
+import s from "./App.module.scss";
+import Card from "./Card/Card";
+import Header from "./Header/Header";
+import { Loading } from "./Loading/Loading";
+
+export interface CoinProps {
+  name: string;
+  symbol: string;
+  rank: number;
+  marketCapUsd: number;
+}
 
 function App() {
+  const [data, setData] = useState<CoinProps[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    fetch("https://api.coincap.io/v2/assets")
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data.data.slice(0, 100));
+        setLoading(false);
+      });
+  }, []);
+
+  {
+    loading && <Loading />;
+  }
+
+  console.log(data);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={s.App}>
+      <div className={s.header}>
+        <Header />
+      </div>
+      <div className={s.container}>
+        {data.map((coin) => (
+          <div>
+            <Card
+              name={coin.name}
+              symbol={coin.symbol}
+              rank={coin.rank}
+              marketCapUsd={coin.marketCapUsd}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
